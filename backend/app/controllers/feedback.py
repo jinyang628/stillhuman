@@ -22,12 +22,16 @@ class FeedbackController:
         router = self.router
 
         @router.post("")
-        async def submit(input: FeedbackRequest) -> JSONResponse:
+        async def submit(input: FeedbackRequest, request: Request) -> JSONResponse:
+            print(request)
             try:
-                return await self.service.submit(
-                    id=input.id,
+                await self.service.submit(
+                    user_id=input.user_id,
                     feedback=input.feedback,
                 )
+                return JSONResponse(status_code=200, content={"success": True})
             except Exception as e:
                 log.error("Unexpected error in feedback controller.py: %s", str(e))
-                raise HTTPException(status_code=500, detail="An unexpected error occurred") from e
+                raise HTTPException(
+                    status_code=500, detail="An unexpected error occurred"
+                ) from e

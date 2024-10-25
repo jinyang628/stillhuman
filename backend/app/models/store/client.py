@@ -42,7 +42,9 @@ class Supabase:
 
 
 async def GET(
-    table_name: str, pydantic_model: type[BaseModel], filter_conditions: Optional[dict] = None
+    table_name: str,
+    pydantic_model: type[BaseModel],
+    filter_conditions: Optional[dict] = None,
 ) -> list:
     """
     Performs a GET request to the supabase database. Filter conditions are exact matches.

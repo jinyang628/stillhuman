@@ -21,7 +21,11 @@ class MessageController:
     def setup_routes(self):
         router = self.router
 
-        @router.post("", response_model=GenerateResponse, dependencies=[Depends(validate_api_key)])
+        @router.post(
+            "",
+            response_model=GenerateResponse,
+            dependencies=[Depends(validate_api_key)],
+        )
         async def generate(input: GenerateRequest) -> GenerateResponse:
             try:
                 return await self.service.generate(
@@ -30,4 +34,6 @@ class MessageController:
                 )
             except Exception as e:
                 log.error("Unexpected error in message controller.py: %s", str(e))
-                raise HTTPException(status_code=500, detail="An unexpected error occurred") from e
+                raise HTTPException(
+                    status_code=500, detail="An unexpected error occurred"
+                ) from e

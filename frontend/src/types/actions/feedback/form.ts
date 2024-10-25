@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const feedbackRequestSchema = z.object({
-  id: z.string().nullable(),
+  user_id: z.string(),
   feedback: z.string().min(1, "Feedback is required"),
 });
 

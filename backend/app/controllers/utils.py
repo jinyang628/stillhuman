@@ -10,7 +10,9 @@ from app.models.store.schema import User
 API_KEY_HEADER = APIKeyHeader(name="X-API-Key")
 
 load_dotenv(find_dotenv(filename=".env"))
-ENABLE_API_KEY_VALIDATION = os.environ.get("ENABLE_API_KEY_VALIDATION", "true").lower() == "true"
+ENABLE_API_KEY_VALIDATION = (
+    os.environ.get("ENABLE_API_KEY_VALIDATION", "true").lower() == "true"
+)
 
 
 async def validate_api_key(api_key: str = Security(API_KEY_HEADER)):

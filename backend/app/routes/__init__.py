@@ -38,7 +38,9 @@ def create_app() -> FastAPI:
         app = FastAPI(lifespan=lifespan, debug=True)
         app.include_router(status_router)
 
-        app.include_router(get_message_controller_router(), tags=["message"], prefix="/api/message")
+        app.include_router(
+            get_message_controller_router(), tags=["message"], prefix="/api/message"
+        )
 
         return app
     except Exception as e:

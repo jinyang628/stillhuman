@@ -6,9 +6,12 @@ from pydantic import BaseModel
 class User(BaseModel):
     id: Optional[int] = None
     name: str
-    api_key: Optional[str] = None
     email: str
+    usage: Optional[int] = None
+    api_key: Optional[str] = None
     created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+
 
 class Feedback(BaseModel):
     user_id: str

@@ -13,5 +13,6 @@ class GenerateRequest(BaseModel):
         description="The conversation history between the character and the visual novel character."
     )
 
+
 class GenerateResponse(BaseModel):
     pass

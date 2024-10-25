@@ -30,7 +30,7 @@ export default function FeedbackForm({
   const form = useForm<FeedbackRequest>({
     resolver: zodResolver(feedbackRequestSchema),
     defaultValues: {
-      id: user?.id || null,
+      user_id: user?.id,
       feedback: "",
     },
   });
