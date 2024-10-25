@@ -3,6 +3,9 @@
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "eslint.format.enable": true,
     "editor.formatOnSave": true,
+    "editor.rulers": [
+      100
+    ],
     "[javascript]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -28,7 +31,8 @@
     "[python]": {
       "editor.defaultFormatter": "ms-python.black-formatter",
       "editor.codeActionsOnSave": {
-        "source.organizeImports": "explicit"
+        "source.convertImportFormat": "always",
+        "source.organizeImports": "always",
       }
     },
     "[json]": {
@@ -43,16 +47,11 @@
       "--trailing-comma",
       "--profile=black",
       "--settings-path",
-      "${workspaceFolder}/server"
+      "${workspaceFolder}/backend"
     ],
     "python.testing.pytestArgs": ["."],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "pylint.importStrategy": "fromEnvironment",
-    "pylint.args": [
-      "--rcfile=server/.pylintrc",
-      "${workspaceFolder}/server"
-    ],
-    "python.analysis.typeCheckingMode": "standard"
+    "python.analysis.typeCheckingMode": "basic"
   }
   
