@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 import PageLoader from "@/components/shared/page-loading-indicator";
-import "./globals.css";
+import "@/styles/globals.css";
 import {
   ClerkLoaded,
   ClerkLoading,

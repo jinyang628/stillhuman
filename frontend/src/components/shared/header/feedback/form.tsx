@@ -51,23 +51,19 @@ export default function FeedbackForm({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea
-                  className="min-h-[10vh]"
-                  placeholder="We love our users and take feedback Super Seriously™"
-                  {...field}
-                />
+                <Textarea className="max-h-[200px]" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <DialogFooter className="sm:justify-end">
-          <Button type="submit">Submit</Button>
+        <DialogFooter className="flex flex-row justify-end space-x-4">
           <DialogClose asChild>
             <Button type="button" variant="secondary">
               Close
             </Button>
           </DialogClose>
+          <Button type="submit">Submit</Button>
         </DialogFooter>
       </form>
     </Form>

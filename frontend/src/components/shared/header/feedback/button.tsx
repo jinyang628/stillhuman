@@ -20,7 +20,7 @@ export default function FeedbackButton() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
-        className="mx-1 px-4 py-1.5 rounded border border-input bg-green-500 hover:bg-green-700 hover:text-white shadow-sm"
+        className="mx-1 px-4 py-1.5 rounded border border-input hover:bg-gray-200 dark:hover:bg-gray-800 shadow-sm"
         aria-label="Feedback"
       >
         Feedback

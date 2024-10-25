@@ -10,19 +10,17 @@ import { Button } from "@/components/ui/button";
 
 export default function HeaderButtons() {
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-2">
-        <ThemeToggle />
-        <FeedbackButton />
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-        <SignedOut>
-          <Button asChild>
-            <Link href="/sign-in">Sign In</Link>
-          </Button>
-        </SignedOut>
-      </div>
+    <div className="flex justify-end items-center space-x-2">
+      <ThemeToggle />
+      <FeedbackButton />
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+      <SignedOut>
+        <Button asChild>
+          <Link href="/sign-in">Sign In</Link>
+        </Button>
+      </SignedOut>
     </div>
   );
 }

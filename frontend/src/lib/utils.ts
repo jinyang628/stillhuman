@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { toast } from '@/hooks/use-toast';
+import { toast } from "@/hooks/use-toast";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -11,18 +11,18 @@ export function handleCopy(text: string, targetName: string) {
     .writeText(text)
     .then(() => {
       toast({
-        title: 'Copied to clipboard',
+        title: "Copied to clipboard",
         description: `The ${targetName} has been copied to your clipboard.`,
         duration: 3000,
       });
     })
     .catch((err) => {
       // eslint-disable-next-line no-console
-      console.error('Failed to copy text: ', err);
+      console.error("Failed to copy text: ", err);
       toast({
-        title: 'Copy failed',
+        title: "Copy failed",
         description: `Failed to copy the ${targetName}. Please try again.`,
-        variant: 'destructive',
+        variant: "destructive",
         duration: 3000,
       });
     });

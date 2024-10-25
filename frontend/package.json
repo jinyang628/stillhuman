@@ -17,6 +17,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.2",
     "@tanstack/react-query": "^5.59.16",
+    "@types/typed.js": "^2.0.0",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -26,9 +27,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.53.1",
+    "react-typed": "^2.0.12",
     "shadcn": "^1.0.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
+    "typed.js": "^2.1.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
