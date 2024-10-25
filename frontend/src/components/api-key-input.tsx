@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useUser } from "@clerk/nextjs";
 
 export default function ApiKeyInput() {
+  const { user } = useUser();
+
   return (
     <>
       <Input
