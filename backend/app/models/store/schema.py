@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class User(BaseModel):
-    id: Optional[int] = None
+    id: Optional[str] = None
     name: str
     email: str
     usage: Optional[int] = None

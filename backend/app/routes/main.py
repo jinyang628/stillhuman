@@ -4,9 +4,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.controllers.feedback import FeedbackController
+from app.controllers.login import LoginController
 from app.controllers.message import MessageController
 from app.routes.status import router as status_router
 from app.services.feedback import FeedbackService
+from app.services.login import LoginService
 from app.services.message import MessageService
 
 log = logging.getLogger(__name__)
@@ -21,6 +23,9 @@ def get_feedback_controller_router():
     service = FeedbackService()
     return FeedbackController(service=service).router
 
+def get_login_controller_router():
+    service = LoginService()
+    return LoginController(service=service).router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -53,6 +58,9 @@ def create_app() -> FastAPI:
             get_feedback_controller_router(), tags=["feedback"], prefix="/api/feedback"
         )
 
+        app.include_router(
+            get_login_controller_router(), tags=["login"], prefix="/api/login"
+        )
         return app
     except Exception as e:
         log.exception("Failed to create renpAI server: %s", e)
