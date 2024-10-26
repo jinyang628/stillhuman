@@ -5,7 +5,7 @@ import { loginRequestSchema } from "@/types/actions/user/login";
 import { validateRequestSchema } from "@/types/actions/user/validate";
 import { ApiKey, defaultApiKeySchema } from "@/types/apiKey";
 import { useUser } from "@clerk/nextjs";
-import { Check, X } from 'lucide-react';
+import { Check, X } from "lucide-react";
 
 import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
@@ -60,7 +60,7 @@ export default function ApiKeyInput() {
 
     setApiKeyState({
       ...apiKeyState,
-      isValid: false // Reset validation state upon any changes
+      isValid: false, // Reset validation state upon any changes
     });
 
     debounceTimeoutRef.current = setTimeout(() => {
@@ -76,7 +76,7 @@ export default function ApiKeyInput() {
       }, 500);
     }, 1500);
   };
-  
+
   const validateApiKey = async (apiKey: string) => {
     if (!user) {
       return;
@@ -93,7 +93,7 @@ export default function ApiKeyInput() {
       });
     } catch (error) {
       if (error instanceof ZodError) {
-        console.error('Zod error: ', error.flatten());
+        console.error("Zod error: ", error.flatten());
       } else if (axios.isCancel(error)) {
         console.log(`Stale request for api key validation was aborted`);
       } else {
@@ -105,22 +105,23 @@ export default function ApiKeyInput() {
         isValid: false,
       });
     }
-    
   };
 
-  const inputLoadingSpinner = <>
-    {loginMutation.isPending ? (
-      <div className="absolute inset-0 flex items-center justify-center bg-background border rounded-md">
-        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-      </div>
-    ) : null}
-  </>
+  const inputLoadingSpinner = (
+    <>
+      {loginMutation.isPending ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-background border rounded-md">
+          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+        </div>
+      ) : null}
+    </>
+  );
 
-  const validationIcon = <div className="absolute right-[-30px] top-1/2 transform -translate-y-1/2">
-    {
-      apiKeyState.isValid ? (
+  const validationIcon = (
+    <div className="absolute right-[-30px] top-1/2 transform -translate-y-1/2">
+      {apiKeyState.isValid ? (
         <span className="text-green-500">
-          <Check/>
+          <Check />
         </span>
       ) : isValidating ? (
         <Loader2 className="animate-spin text-muted-foreground" />
@@ -128,9 +129,9 @@ export default function ApiKeyInput() {
         <span className="text-red-500">
           <X />
         </span>
-      )
-    }
-  </div>
+      )}
+    </div>
+  );
 
   return (
     <div className="relative w-full">

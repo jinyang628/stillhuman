@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-import { validate } from '@/actions/user/validate';
+import { validate } from "@/actions/user/validate";
 
-import { validateRequestSchema } from '@/types/actions/user/validate';
+import { validateRequestSchema } from "@/types/actions/user/validate";
 
 export async function GET(req: Request) {
   try {
@@ -15,7 +15,7 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: 'Error validating Api Key. Please try again later.' },
+      { error: "Error validating Api Key. Please try again later." },
       { status: 500 },
     );
   }
