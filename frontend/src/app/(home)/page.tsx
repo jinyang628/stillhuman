@@ -2,13 +2,14 @@
 
 import ApiKeyInput from "@/components/api-key-input";
 import Title from "@/components/title";
-import { ApiKey, defaultApiKeySchema } from "@/types/apiKey";
+import { ApiKey } from "@/types/data/apiKey";
+import { useApiKeyStore } from "@/types/store/apiKey";
 
 import { useState } from "react";
 
 export default function Home() {
   const [apiKeyInputVisible, setApiKeyInputVisible] = useState<boolean>(false);
-  const [apiKeyState, setApiKeyState] = useState<ApiKey>(defaultApiKeySchema);
+  const { apiKeyState, setApiKeyState } = useApiKeyStore();
 
   const onTitleComplete = () => {
     setApiKeyInputVisible(true);

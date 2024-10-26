@@ -3,7 +3,7 @@ import { useLoginMutation } from "@/hooks/use-login";
 import { useValidateMutation } from "@/hooks/use-validate";
 import { loginRequestSchema } from "@/types/actions/user/login";
 import { validateRequestSchema } from "@/types/actions/user/validate";
-import { ApiKey } from "@/types/apiKey";
+import { ApiKey } from "@/types/data/apiKey";
 import { useUser } from "@clerk/nextjs";
 import { Check, X } from "lucide-react";
 
@@ -20,10 +20,10 @@ type ApiKeyInputProps = {
 export default function ApiKeyInput({ apiKeyData, onApiKeyChange }: ApiKeyInputProps) {
   const { user, isLoaded } = useUser();
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [inputValue, setInputValue] = useState<string>("");
   const [isValidating, setIsValidating] = useState<boolean>(false);
   const isInitializedRef = useRef(false);
   const loginMutation = useLoginMutation();
+  const [isInitializing, setIsInitializing] = useState(true);
   const { mutateValidationWithAbort } = useValidateMutation();
 
   useEffect(() => {
@@ -43,35 +43,27 @@ export default function ApiKeyInput({ apiKeyData, onApiKeyChange }: ApiKeyInputP
         }
         isInitializedRef.current = true;
       }
+      setIsInitializing(false);
     };
     initializeUser();
   }, [isLoaded, user]);
 
   const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsValidating(true);
     const newValue = e.target.value;
-    setInputValue(newValue);
+  
+    onApiKeyChange({
+      apiKey: newValue,
+      isValid: false, // Reset validation state upon any changes
+    });
+
+    setIsValidating(true);
 
     // Clear debounce timeout
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
     }
 
-    // Don't validate empty input
-    if (!newValue.trim()) {
-      return;
-    }
-
-    onApiKeyChange({
-      ...apiKeyData,
-      isValid: false, // Reset validation state upon any changes
-    });
-
     debounceTimeoutRef.current = setTimeout(() => {
-      onApiKeyChange({
-        ...apiKeyData,
-        apiKey: newValue,
-      });
       validateApiKey(newValue);
 
       // Prevent race conditions where loading ends but isValid boolean is not set yet
@@ -82,7 +74,7 @@ export default function ApiKeyInput({ apiKeyData, onApiKeyChange }: ApiKeyInputP
   };
 
   const validateApiKey = async (apiKey: string) => {
-    if (!user) {
+    if (!user || !apiKey) {
       return;
     }
     const validateRequest = validateRequestSchema.parse({
@@ -92,7 +84,7 @@ export default function ApiKeyInput({ apiKeyData, onApiKeyChange }: ApiKeyInputP
     try {
       const validateResponse = await mutateValidationWithAbort(validateRequest);
       onApiKeyChange({
-        ...apiKeyData,
+        apiKey: apiKey,
         isValid: validateResponse.success,
       });
     } catch (error) {
@@ -105,21 +97,11 @@ export default function ApiKeyInput({ apiKeyData, onApiKeyChange }: ApiKeyInputP
       }
 
       onApiKeyChange({
-        ...apiKeyData,
+        apiKey: apiKey,
         isValid: false,
       });
     }
   };
-
-  const inputLoadingSpinner = (
-    <>
-      {loginMutation.isPending ? (
-        <div className="absolute inset-0 flex items-center justify-center bg-background border rounded-md">
-          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-        </div>
-      ) : null}
-    </>
-  );
 
   const validationIcon = (
     <div className="absolute right-[-30px] top-1/2 transform -translate-y-1/2">
@@ -137,21 +119,25 @@ export default function ApiKeyInput({ apiKeyData, onApiKeyChange }: ApiKeyInputP
     </div>
   );
 
-  return (
-    <div className="relative w-full">
-      {inputLoadingSpinner}
-      <div>
-        <Input
-          className="w-full"
-          placeholder={loginMutation.isPending ? "" : "Enter API Key"}
-          disabled={loginMutation.isPending}
-          value={inputValue}
-          onChange={handleApiKeyChange}
-          onFocus={(e) => (e.target.placeholder = "")}
-          onBlur={(e) => (e.target.placeholder = "Enter API Key")}
-        />
-        {validationIcon}
-      </div>
-    </div>
-  );
+  return (<div className="relative w-full">
+    {
+      isInitializing
+        ? 
+          <div className="absolute inset-0 flex items-center justify-center rounded-md">
+            <Loader2 className="animate-spin text-muted-foreground" />
+          </div>
+        :
+          <div>
+            <Input
+              className="w-full"
+              placeholder="Enter API Key"
+              value={apiKeyData.apiKey}
+              onChange={handleApiKeyChange}
+              onFocus={(e) => (e.target.placeholder = "")}
+              onBlur={(e) => (e.target.placeholder = "Enter API Key")}
+            />
+            {validationIcon}
+          </div>
+    }
+  </div>);
 }
