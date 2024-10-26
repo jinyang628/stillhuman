@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLoginMutation } from "@/hooks/use-login";
 import { useValidateMutation } from "@/hooks/use-validate";
@@ -7,6 +6,7 @@ import { validateRequestSchema } from "@/types/actions/user/validate";
 import { ApiKey, defaultApiKeySchema } from "@/types/apiKey";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
 
 export default function ApiKeyInput() {
   const { user, isLoaded } = useUser();
@@ -69,15 +69,20 @@ export default function ApiKeyInput() {
   };
 
   return (
-    <>
+    <div className="relative w-full">
+      {loginMutation.isPending ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-background border rounded-md">
+          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+        </div>
+      ) : null}
       <Input
         className="w-full"
-        placeholder="Enter API Key"
+        placeholder={loginMutation.isPending ? "" : "Enter API Key"}
         disabled={loginMutation.isPending}
         onChange={handleApiKeyChange}
         onFocus={(e) => (e.target.placeholder = "")}
         onBlur={(e) => (e.target.placeholder = "Enter API Key")}
       />
-    </>
+    </div>
   );
 }
