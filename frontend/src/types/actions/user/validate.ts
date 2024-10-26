@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const validateRequestSchema = z.object({
   id: z.string(),
-  api_key: z.string()
+  api_key: z.string(),
 });
 
 export type ValidateRequest = z.infer<typeof validateRequestSchema>;

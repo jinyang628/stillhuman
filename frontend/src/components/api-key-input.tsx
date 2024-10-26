@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from "react";
 export default function ApiKeyInput() {
   const { user, isLoaded } = useUser();
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [ apiKeyState, setApiKeyState ] = useState<ApiKey>(defaultApiKeySchema);
+  const [apiKeyState, setApiKeyState] = useState<ApiKey>(defaultApiKeySchema);
   const isInitializedRef = useRef(false);
   const loginMutation = useLoginMutation();
   const validateMutation = useValidateMutation();
@@ -52,7 +52,6 @@ export default function ApiKeyInput() {
     }, 1500);
   };
 
-
   const validateApiKey = async () => {
     if (!user) {
       return;
@@ -61,12 +60,13 @@ export default function ApiKeyInput() {
       id: user.id,
       api_key: apiKeyState.apiKey,
     });
-    const validateResponse = await validateMutation.mutateAsync(validateRequest);
+    const validateResponse =
+      await validateMutation.mutateAsync(validateRequest);
     setApiKeyState({
       ...apiKeyState,
       isValid: validateResponse.success,
-    })
-  }
+    });
+  };
 
   return (
     <>

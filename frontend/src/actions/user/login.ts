@@ -9,7 +9,10 @@ const SERVICE_ENDPOINT = "api/user";
 
 export async function login(input: LoginRequest) {
   try {
-    const response = await axios.post(`${BACKEND_URL}/${SERVICE_ENDPOINT}`, input);
+    const response = await axios.post(
+      `${BACKEND_URL}/${SERVICE_ENDPOINT}`,
+      input,
+    );
     return response.data;
   } catch (error) {
     console.error(error);
