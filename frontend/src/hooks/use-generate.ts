@@ -1,5 +1,8 @@
 import { generate } from "@/actions/message/generate";
-import { GenerateRequest, GenerateResponse } from "@/types/actions/message/generate";
+import {
+  GenerateRequest,
+  GenerateResponse,
+} from "@/types/actions/message/generate";
 import { useMutation } from "@tanstack/react-query";
 
 export const useGenerateMutation = () => {
