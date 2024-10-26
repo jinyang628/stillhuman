@@ -116,7 +116,7 @@ export default function ApiKeyInput() {
     ) : null}
   </>
 
-  const validationIcon = <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+  const validationIcon = <div className="absolute right-[-30px] top-1/2 transform -translate-y-1/2">
     {
       apiKeyState.isValid ? (
         <span className="text-green-500">
