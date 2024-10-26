@@ -31,6 +31,7 @@ class UserService:
 
     async def validate(self, id: str, api_key: str) -> ValidateResponse:
         try:
+            print(api_key)
             UUID(api_key)
         except ValueError:
             return ValidateResponse(success=False)
@@ -40,6 +41,7 @@ class UserService:
             pydantic_model=User,
             filter_conditions={"id": id, "api_key": api_key},
         )
+        print(users)
         if len(users) > 1:
             raise DatabaseError("Multiple users found with the same ID and API Key")
         elif len(users) != 1:

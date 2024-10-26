@@ -46,10 +46,12 @@ class UserController:
         @router.get("")
         async def validate(id: str, api_key: str) -> ValidateResponse:
             try:
-                return await self.service.validate(
+                response: ValidateResponse = await self.service.validate(
                     id=id,
                     api_key=api_key,
                 )
+                print(response)
+                return response
             except DatabaseError as e:
                 log.error(
                     "Error occurred while making request to DB in user controller.py: %s",

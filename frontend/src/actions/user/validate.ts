@@ -19,6 +19,7 @@ export async function validate(
       params: input,
     });
     const validateResponse = validateResponseSchema.parse(response.data);
+    console.log(validateResponse);
     return validateResponse;
   } catch (error) {
     console.error(error);
