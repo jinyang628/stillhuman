@@ -1,8 +1,10 @@
 import logging
+from uuid import UUID
 
 from app.exceptions.exception import DatabaseError
 from app.models.store.client import GET, POST
 from app.models.store.schema import User
+from app.models.user.validate import ValidateResponse
 
 log = logging.getLogger(__name__)
 
@@ -26,3 +28,21 @@ class UserService:
                 email=email,
             ),
         )
+
+    async def validate(self, id: str, api_key: str) -> ValidateResponse:
+        try:
+            UUID(api_key)
+        except ValueError:
+            return ValidateResponse(success=False)
+
+        users: list[User] = await GET(
+            table_name="users",
+            pydantic_model=User,
+            filter_conditions={"id": id, "api_key": api_key},
+        )
+        if len(users) > 1:
+            raise DatabaseError("Multiple users found with the same ID and API Key")
+        elif len(users) != 1:
+            return ValidateResponse(success=False)
+
+        return ValidateResponse(success=True)

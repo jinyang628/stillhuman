@@ -4,8 +4,9 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse
 
 from app.exceptions.exception import DatabaseError
-from app.models.login import LoginRequest
-from app.services.login import UserService
+from app.models.user.login import LoginRequest
+from app.models.user.validate import ValidateResponse
+from app.services.user import UserService
 
 log = logging.getLogger(__name__)
 
@@ -31,12 +32,32 @@ class UserController:
                 )
                 return JSONResponse(status_code=200, content={"success": True})
             except DatabaseError as e:
-                log.error("Error occurred while making request to DB in user controller.py: %s", str(e))
-                raise HTTPException(
-                    status_code=500, detail="Database error occurred"
+                log.error(
+                    "Error occurred while making request to DB in user controller.py: %s",
+                    str(e),
                 )
+                raise HTTPException(status_code=500, detail="Database error occurred")
             except Exception as e:
                 log.error("Unexpected error in user controller.py: %s", str(e))
                 raise HTTPException(
                     status_code=500, detail="An unexpected error occurred"
                 ) from e
+
+        @router.get("")
+        async def validate(id: str, api_key: str) -> ValidateResponse:
+            try:
+                return await self.service.validate(
+                    id=id,
+                    api_key=api_key,
+                )
+            except DatabaseError as e:
+                log.error(
+                    "Error occurred while making request to DB in user controller.py: %s",
+                    str(e),
+                )
+                raise HTTPException(status_code=500, detail="Database error occurred")
+            except Exception as e:
+                log.error("Unexpected error in user controller.py: %s", str(e))
+                raise HTTPException(
+                    status_code=500, detail="An unexpected error occurred"
+                )

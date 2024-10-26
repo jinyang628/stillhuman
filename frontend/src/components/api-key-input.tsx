@@ -1,14 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLoginMutation } from "@/hooks/use-login";
+import { useValidateMutation } from "@/hooks/use-validate";
 import { loginRequestSchema } from "@/types/actions/user/login";
+import { validateRequestSchema } from "@/types/actions/user/validate";
+import { ApiKey, defaultApiKeySchema } from "@/types/apiKey";
 import { useUser } from "@clerk/nextjs";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ApiKeyInput() {
   const { user, isLoaded } = useUser();
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [ apiKeyState, setApiKeyState ] = useState<ApiKey>(defaultApiKeySchema);
   const isInitializedRef = useRef(false);
   const loginMutation = useLoginMutation();
+  const validateMutation = useValidateMutation();
 
   useEffect(() => {
     const initializeUser = async () => {
@@ -31,7 +37,36 @@ export default function ApiKeyInput() {
     initializeUser();
   }, [isLoaded, user]);
 
-  console.log(loginMutation.isPending);
+  const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setApiKeyState({
+      apiKey: e.target.value,
+      isValid: false,
+    });
+
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      validateApiKey();
+    }, 1500);
+  };
+
+
+  const validateApiKey = async () => {
+    if (!user) {
+      return;
+    }
+    const validateRequest = validateRequestSchema.parse({
+      id: user.id,
+      api_key: apiKeyState.apiKey,
+    });
+    const validateResponse = await validateMutation.mutateAsync(validateRequest);
+    setApiKeyState({
+      ...apiKeyState,
+      isValid: validateResponse.success,
+    })
+  }
 
   return (
     <>
@@ -39,10 +74,10 @@ export default function ApiKeyInput() {
         className="w-full"
         placeholder="Enter API Key"
         disabled={loginMutation.isPending}
+        onChange={handleApiKeyChange}
         onFocus={(e) => (e.target.placeholder = "")}
         onBlur={(e) => (e.target.placeholder = "Enter API Key")}
       />
-      <Button type="submit">Submit</Button>
     </>
   );
 }

@@ -8,8 +8,8 @@ from app.controllers.message import MessageController
 from app.controllers.user import UserController
 from app.routes.status import router as status_router
 from app.services.feedback import FeedbackService
-from app.services.login import UserService
 from app.services.message import MessageService
+from app.services.user import UserService
 
 log = logging.getLogger(__name__)
 
