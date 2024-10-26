@@ -4,15 +4,15 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse
 
 from app.models.login import LoginRequest
-from app.services.login import LoginService
+from app.services.login import UserService
 
 log = logging.getLogger(__name__)
 
 router = APIRouter()
 
 
-class LoginController:
-    def __init__(self, service: LoginService):
+class UserController:
+    def __init__(self, service: UserService):
         self.router = APIRouter()
         self.service = service
         self.setup_routes()
@@ -21,11 +21,12 @@ class LoginController:
         router = self.router
 
         @router.post("")
-        async def generate(input: LoginRequest):
+        async def login(input: LoginRequest):
             try:
-                return await self.service.generate(
-                    character_profile=input.character_profile,
-                    messages=input.messages,
+                return await self.service.login(
+                    id=input.id,
+                    name=input.name,
+                    email=input.email,
                 )
             except Exception as e:
                 log.error("Unexpected error in user controller.py: %s", str(e))

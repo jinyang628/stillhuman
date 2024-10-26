@@ -4,11 +4,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.controllers.feedback import FeedbackController
-from app.controllers.login import LoginController
 from app.controllers.message import MessageController
+from app.controllers.user import UserController
 from app.routes.status import router as status_router
 from app.services.feedback import FeedbackService
-from app.services.login import LoginService
+from app.services.login import UserService
 from app.services.message import MessageService
 
 log = logging.getLogger(__name__)
@@ -23,9 +23,11 @@ def get_feedback_controller_router():
     service = FeedbackService()
     return FeedbackController(service=service).router
 
+
 def get_login_controller_router():
-    service = LoginService()
-    return LoginController(service=service).router
+    service = UserService()
+    return UserController(service=service).router
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -59,7 +61,7 @@ def create_app() -> FastAPI:
         )
 
         app.include_router(
-            get_login_controller_router(), tags=["login"], prefix="/api/login"
+            get_login_controller_router(), tags=["login"], prefix="/api/user"
         )
         return app
     except Exception as e:

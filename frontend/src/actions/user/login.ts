@@ -1,8 +1,6 @@
 "use server";
 
-import {
-  LoginRequest,
-} from "@/types/actions/user/login";
+import { LoginRequest } from "@/types/actions/user/login";
 
 import axios from "axios";
 
@@ -11,11 +9,7 @@ const SERVICE_ENDPOINT = "api/user";
 
 export async function login(input: LoginRequest) {
   try {
-    await axios.post(
-      `${BACKEND_URL}/${SERVICE_ENDPOINT}`,
-      input,
-    );
-
+    await axios.post(`${BACKEND_URL}/${SERVICE_ENDPOINT}`, input);
   } catch (error) {
     console.error(error);
     throw error;
