@@ -123,24 +123,26 @@ export default function ApiKeyInput({
   );
 
   return (
-    <div className="relative w-full">
-      {isInitializing ? (
-        <div className="absolute inset-0 flex items-center justify-center rounded-md">
-          <Loader2 className="animate-spin text-muted-foreground" />
-        </div>
-      ) : (
-        <div>
-          <Input
-            className="w-full"
-            placeholder="Enter API Key"
-            value={apiKeyData.apiKey}
-            onChange={handleApiKeyChange}
-            onFocus={(e) => (e.target.placeholder = "")}
-            onBlur={(e) => (e.target.placeholder = "Enter API Key")}
-          />
-          {validationIcon}
-        </div>
-      )}
+    <div className="flex justify-center">
+      <div className="relative w-full max-w-[300px]">
+        {isInitializing ? (
+          <div className="absolute inset-0 flex items-center justify-center rounded-md">
+            <Loader2 className="animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <div>
+            <Input
+              type="password"
+              className="w-full"
+              value={apiKeyData.apiKey}
+              onChange={handleApiKeyChange}
+              onFocus={(e) => (e.target.placeholder = "")}
+              onBlur={(e) => (e.target.placeholder = "Enter API Key")}
+            />
+            {validationIcon}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

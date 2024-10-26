@@ -21,16 +21,15 @@ class MessageController:
     def setup_routes(self):
         router = self.router
 
-        @router.post(
+        @router.get(
             "",
             response_model=GenerateResponse,
             dependencies=[Depends(validate_api_key)],
         )
-        async def generate(input: GenerateRequest) -> GenerateResponse:
+        async def generate(url: str) -> GenerateResponse:
             try:
                 return await self.service.generate(
-                    character_profile=input.character_profile,
-                    messages=input.messages,
+                    url=url,
                 )
             except Exception as e:
                 log.error("Unexpected error in message controller.py: %s", str(e))

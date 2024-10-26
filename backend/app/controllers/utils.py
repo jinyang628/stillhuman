@@ -24,6 +24,8 @@ async def validate_api_key(api_key: str = Security(API_KEY_HEADER)):
     if not ENABLE_API_KEY_VALIDATION:
         return
 
+    print(api_key)
+
     if not api_key:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
