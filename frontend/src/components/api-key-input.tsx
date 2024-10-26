@@ -9,7 +9,6 @@ import { Check, X } from 'lucide-react';
 
 import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { set } from "zod";
 
 export default function ApiKeyInput() {
   const { user, isLoaded } = useUser();
@@ -68,11 +67,13 @@ export default function ApiKeyInput() {
         apiKey: newValue,
       });
       validateApiKey(newValue);
-      setIsValidating(false);
+
+      // Prevent race conditions where loading ends but isValid boolean is not set yet
+      setTimeout(() => {
+        setIsValidating(false);
+      }, 500);
     }, 1500);
   };
-
-  // implement abort requests 
   
   const validateApiKey = async (apiKey: string) => {
     if (!user) {
