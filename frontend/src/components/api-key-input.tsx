@@ -3,7 +3,7 @@ import { useLoginMutation } from "@/hooks/use-login";
 import { useValidateMutation } from "@/hooks/use-validate";
 import { loginRequestSchema } from "@/types/actions/user/login";
 import { validateRequestSchema } from "@/types/actions/user/validate";
-import { ApiKey, defaultApiKeySchema } from "@/types/apiKey";
+import { ApiKey } from "@/types/apiKey";
 import { useUser } from "@clerk/nextjs";
 import { Check, X } from "lucide-react";
 
@@ -12,10 +12,14 @@ import { Loader2 } from "lucide-react";
 import { ZodError } from "zod";
 import axios from "axios";
 
-export default function ApiKeyInput() {
+type ApiKeyInputProps = {
+  apiKeyData: ApiKey;
+  onApiKeyChange: (apiKey: ApiKey) => void;
+};
+
+export default function ApiKeyInput({ apiKeyData, onApiKeyChange }: ApiKeyInputProps) {
   const { user, isLoaded } = useUser();
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [apiKeyState, setApiKeyState] = useState<ApiKey>(defaultApiKeySchema);
   const [inputValue, setInputValue] = useState<string>("");
   const [isValidating, setIsValidating] = useState<boolean>(false);
   const isInitializedRef = useRef(false);
@@ -58,14 +62,14 @@ export default function ApiKeyInput() {
       return;
     }
 
-    setApiKeyState({
-      ...apiKeyState,
+    onApiKeyChange({
+      ...apiKeyData,
       isValid: false, // Reset validation state upon any changes
     });
 
     debounceTimeoutRef.current = setTimeout(() => {
-      setApiKeyState({
-        ...apiKeyState,
+      onApiKeyChange({
+        ...apiKeyData,
         apiKey: newValue,
       });
       validateApiKey(newValue);
@@ -87,8 +91,8 @@ export default function ApiKeyInput() {
     });
     try {
       const validateResponse = await mutateValidationWithAbort(validateRequest);
-      setApiKeyState({
-        ...apiKeyState,
+      onApiKeyChange({
+        ...apiKeyData,
         isValid: validateResponse.success,
       });
     } catch (error) {
@@ -100,8 +104,8 @@ export default function ApiKeyInput() {
         console.error(error);
       }
 
-      setApiKeyState({
-        ...apiKeyState,
+      onApiKeyChange({
+        ...apiKeyData,
         isValid: false,
       });
     }
@@ -119,7 +123,7 @@ export default function ApiKeyInput() {
 
   const validationIcon = (
     <div className="absolute right-[-30px] top-1/2 transform -translate-y-1/2">
-      {apiKeyState.isValid ? (
+      {apiKeyData.isValid ? (
         <span className="text-green-500">
           <Check />
         </span>
