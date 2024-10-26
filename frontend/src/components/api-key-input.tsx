@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 export default function ApiKeyInput() {
   const { user, isLoaded } = useUser();
   const isInitializedRef = useRef(false);
-  const { loginMutation } = useLoginMutation();
+  const loginMutation = useLoginMutation();
 
   useEffect(() => {
     const initializeUser = async () => {
@@ -23,21 +23,15 @@ export default function ApiKeyInput() {
             name: name,
             email: email,
           });
-          loginMutation.mutate(loginRequest, {
-            onSuccess: () => {
-              console.log("Successfully logged in!");
-            },
-            onError: (error) => {
-              console.error("Error logging in:", error);
-            },
-          });
+          await loginMutation.mutateAsync(loginRequest);
         }
         isInitializedRef.current = true;
       }
     };
     initializeUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, user]);
+
+  console.log(loginMutation.isPending);
 
   return (
     <>

@@ -4,12 +4,16 @@ import { useMutation } from "@tanstack/react-query";
 
 export const useLoginMutation = () => {
   const loginMutation = useMutation({
+    mutationKey: ['login'],
     mutationFn: async (request: LoginRequest) => {
-      await login(request);
+      try {
+        const response = await login(request);
+        return response
+      } catch (error) {
+        throw error;
+      }
     },
   });
 
-  return {
-    loginMutation,
-  };
+  return loginMutation;
 };

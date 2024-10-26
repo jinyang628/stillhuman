@@ -3,6 +3,7 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse
 
+from app.exceptions.exception import DatabaseError
 from app.models.login import LoginRequest
 from app.services.login import UserService
 
@@ -21,12 +22,18 @@ class UserController:
         router = self.router
 
         @router.post("")
-        async def login(input: LoginRequest):
+        async def login(input: LoginRequest) -> JSONResponse:
             try:
-                return await self.service.login(
+                await self.service.login(
                     id=input.id,
                     name=input.name,
                     email=input.email,
+                )
+                return JSONResponse(status_code=200, content={"success": True})
+            except DatabaseError as e:
+                log.error("Error occurred while making request to DB in user controller.py: %s", str(e))
+                raise HTTPException(
+                    status_code=500, detail="Database error occurred"
                 )
             except Exception as e:
                 log.error("Unexpected error in user controller.py: %s", str(e))
