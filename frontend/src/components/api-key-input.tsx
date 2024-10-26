@@ -9,6 +9,8 @@ import { Check, X } from 'lucide-react';
 
 import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { ZodError } from "zod";
+import axios from "axios";
 
 export default function ApiKeyInput() {
   const { user, isLoaded } = useUser();
@@ -18,7 +20,7 @@ export default function ApiKeyInput() {
   const [isValidating, setIsValidating] = useState<boolean>(false);
   const isInitializedRef = useRef(false);
   const loginMutation = useLoginMutation();
-  const validateMutation = useValidateMutation();
+  const { mutateValidationWithAbort } = useValidateMutation();
 
   useEffect(() => {
     const initializeUser = async () => {
@@ -84,13 +86,20 @@ export default function ApiKeyInput() {
       api_key: apiKey,
     });
     try {
-      const validateResponse = await validateMutation.mutateAsync(validateRequest);
+      const validateResponse = await mutateValidationWithAbort(validateRequest);
       setApiKeyState({
         ...apiKeyState,
         isValid: validateResponse.success,
       });
     } catch (error) {
-      console.error(error);
+      if (error instanceof ZodError) {
+        console.error('Zod error: ', error.flatten());
+      } else if (axios.isCancel(error)) {
+        console.log(`Stale request for api key validation was aborted`);
+      } else {
+        console.error(error);
+      }
+
       setApiKeyState({
         ...apiKeyState,
         isValid: false,
