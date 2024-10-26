@@ -1,12 +1,12 @@
 "use client";
 
-import { defaultApiKeyState, apiKeySchema } from '@/types/data/apiKey';
-import { createPersistedStore } from '@/types/store/base';
+import { defaultApiKeyState, apiKeySchema } from "@/types/data/apiKey";
+import { createPersistedStore } from "@/types/store/base";
 
 export const useApiKeyStore = createPersistedStore(
-  'apiKey',
+  "apiKey",
   defaultApiKeyState,
   apiKeySchema,
-  'apiKeyState',
-  'setApiKeyState',
+  "apiKeyState",
+  "setApiKeyState",
 );

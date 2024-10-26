@@ -17,7 +17,10 @@ type ApiKeyInputProps = {
   onApiKeyChange: (apiKey: ApiKey) => void;
 };
 
-export default function ApiKeyInput({ apiKeyData, onApiKeyChange }: ApiKeyInputProps) {
+export default function ApiKeyInput({
+  apiKeyData,
+  onApiKeyChange,
+}: ApiKeyInputProps) {
   const { user, isLoaded } = useUser();
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isValidating, setIsValidating] = useState<boolean>(false);
@@ -50,7 +53,7 @@ export default function ApiKeyInput({ apiKeyData, onApiKeyChange }: ApiKeyInputP
 
   const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-  
+
     onApiKeyChange({
       apiKey: newValue,
       isValid: false, // Reset validation state upon any changes
@@ -119,25 +122,25 @@ export default function ApiKeyInput({ apiKeyData, onApiKeyChange }: ApiKeyInputP
     </div>
   );
 
-  return (<div className="relative w-full">
-    {
-      isInitializing
-        ? 
-          <div className="absolute inset-0 flex items-center justify-center rounded-md">
-            <Loader2 className="animate-spin text-muted-foreground" />
-          </div>
-        :
-          <div>
-            <Input
-              className="w-full"
-              placeholder="Enter API Key"
-              value={apiKeyData.apiKey}
-              onChange={handleApiKeyChange}
-              onFocus={(e) => (e.target.placeholder = "")}
-              onBlur={(e) => (e.target.placeholder = "Enter API Key")}
-            />
-            {validationIcon}
-          </div>
-    }
-  </div>);
+  return (
+    <div className="relative w-full">
+      {isInitializing ? (
+        <div className="absolute inset-0 flex items-center justify-center rounded-md">
+          <Loader2 className="animate-spin text-muted-foreground" />
+        </div>
+      ) : (
+        <div>
+          <Input
+            className="w-full"
+            placeholder="Enter API Key"
+            value={apiKeyData.apiKey}
+            onChange={handleApiKeyChange}
+            onFocus={(e) => (e.target.placeholder = "")}
+            onBlur={(e) => (e.target.placeholder = "Enter API Key")}
+          />
+          {validationIcon}
+        </div>
+      )}
+    </div>
+  );
 }

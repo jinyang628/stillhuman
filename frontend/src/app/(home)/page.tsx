@@ -24,7 +24,12 @@ export default function Home() {
       <Title onTitleComplete={onTitleComplete} />
       <div className="flex-1 flex justify-center items-center w-full max-w-screen-xl px-4">
         <div className="flex w-full max-w-[300px] space-x-3">
-          {apiKeyInputVisible && <ApiKeyInput apiKeyData={apiKeyState} onApiKeyChange={onApiKeyChange} />}
+          {apiKeyInputVisible && (
+            <ApiKeyInput
+              apiKeyData={apiKeyState}
+              onApiKeyChange={onApiKeyChange}
+            />
+          )}
         </div>
       </div>
     </div>
