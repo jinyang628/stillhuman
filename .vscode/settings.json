@@ -22,7 +22,7 @@
     "prettier.configPath": "./frontend/.prettierrc.js",
     "eslint.workingDirectories": [
       {
-        "directory": "./ui",
+        "directory": "./frontend",
         "changeProcessCWD": true
       }
     ],
