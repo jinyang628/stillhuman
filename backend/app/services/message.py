@@ -6,6 +6,7 @@ from playwright.async_api import async_playwright
 from app.models.generate import GenerateResponse
 from app.models.message import Message
 
+
 class MessageService:
     async def generate(self, url: str) -> GenerateResponse:
         atree: dict = await extract_atree(url)
@@ -17,6 +18,7 @@ class MessageService:
 
 def process_atree(atree: dict) -> list[Message]:
     print(atree.get("children"))
+
 
 async def extract_atree(url: str) -> dict:
     # We are using this chrome extension to extract the claude chat log
